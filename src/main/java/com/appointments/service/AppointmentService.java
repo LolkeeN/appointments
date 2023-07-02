@@ -6,13 +6,17 @@ import com.appointments.database.repository.AppointmentRepository;
 import com.appointments.database.repository.ClientRepository;
 import com.appointments.database.repository.DepartmentRepository;
 import com.appointments.dto.AppointmentResponseDto;
+import com.appointments.dto.AvailableTimeSlotsRequestDto;
 import com.appointments.dto.CreateAppointmentDto;
 import com.appointments.exception.ClientNotFoundException;
 import com.appointments.exception.DepartmentNotFoundException;
 import com.appointments.mapper.AppointmentMapper;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -60,5 +64,14 @@ public class AppointmentService {
                 appointmentRepository.save(appointment);
             }
         }
+    }
+
+    public Map<String, Boolean> getTimeSlotsInformation(AvailableTimeSlotsRequestDto dto) {
+        Map<String, Boolean> timeAvailableMap = new HashMap<>();
+        for (String time : dto.getTime()) {
+            Boolean timeIsNotFree = appointmentRepository.timeSlotIsNotFree(time, dto.getDate());
+            timeAvailableMap.put(time, !timeIsNotFree);
+        }
+        return timeAvailableMap;
     }
 }
