@@ -29,6 +29,7 @@ public class Client {
     private String avatarColor;
     @OneToMany(mappedBy = "client")
     private List<Appointment> appointments;
+    private boolean loggedIn;
 
     public Client() {
         this.id = UUID.randomUUID().toString();

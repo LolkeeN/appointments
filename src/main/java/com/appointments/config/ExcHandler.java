@@ -4,6 +4,7 @@ import com.appointments.exception.ClientNotFoundException;
 import com.appointments.exception.DepartmentNotFoundException;
 import com.appointments.exception.EmailAlreadyInUseException;
 import com.appointments.exception.InvalidPasswordException;
+import com.appointments.exception.NotLoggedInException;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.ConstraintViolationException;
 import lombok.Builder;
@@ -62,6 +63,15 @@ public class ExcHandler {
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(NotLoggedInException.class)
+    public ResponseEntity<?> constraintViolationExceptionException(NotLoggedInException e) {
+        var response = Response.builder()
+                .code(403)
+                .message(e.getMessage())
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
 
     @Data

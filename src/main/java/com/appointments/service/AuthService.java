@@ -23,7 +23,8 @@ public class AuthService {
         if (!passwordEncoder.matches(dto.getPassword(), client.getPassword())){
             throw new InvalidPasswordException("Invalid password for user " + dto.getEmail());
         }
-
+        client.setLoggedIn(true);
+        clientService.saveClient(client);
         return ClientMapper.toClientResponseDto(client);
     }
 }
